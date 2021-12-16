@@ -36,7 +36,7 @@ class TadpoleDataset(torch.utils.data.Dataset):
     """Face Landmarks dataset."""
 
     def __init__(self, fold=0, train=True, samples_per_epoch=100, device='cpu',full=False):
-        with open('data/train_data.pickle', 'rb') as f:
+        with open('data/tadpole_data.pickle', 'rb') as f:
             X_,y_,train_mask_,test_mask_, weight_ = pickle.load(f) # Load the data
         
         if not full:
