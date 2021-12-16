@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+#log files
+*.log
+tb_logs/
+lightning_logs/
+wandb/
+
+#Keops related generate files
+CMakeCache.txt
+CMakeFiles/
+build-libKeOps*
+
+#Do not add jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+#other
+EV_GCN/
+dgcnn.pytorch/
+*.tikz
+stats_*
+train_*
+data/
+
