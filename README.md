@@ -31,4 +31,4 @@ python train.py
 ``` 
 
 ## Notes
-The graph sampling code is based on a modified version of the KeOps libray (www.kernel-operations.io) to speed-up the computation. In particular, the original libray has been modified to handle the stochasticity of the sampling strategy, allowing to sample random numbers from a uniform distribution.
+The graph sampling code is based on a modified version of the KeOps libray (www.kernel-operations.io) to speed-up the computation. In particular, the argKmin function of the original libray has been modified to handle the stochasticity of the sampling strategy, adding samples drawn from a Gumbel distribution to the input before performing the reduction.
