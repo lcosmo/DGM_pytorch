@@ -1,5 +1,5 @@
+import os
 import torch
-import pickle
 import numpy as np
 
 import torch_geometric
@@ -10,14 +10,12 @@ from torch.utils.data import DataLoader
 import torch_scatter
 
 import pytorch_lightning as pl
-# import PIL
-
 from argparse import Namespace
 
-
-
 from DGMlib.layers import *
-
+if (not os.environ.get("USE_KEOPS")) or os.environ.get("USE_KEOPS")=="False":
+    from DGMlib.layers_dense import *
+    
 class DGM_Model(pl.LightningModule):
     def __init__(self, hparams):
         super(DGM_Model,self).__init__()

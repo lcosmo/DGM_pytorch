@@ -29,6 +29,7 @@ def sparse_eye(size):
     cls = getattr(torch.sparse, values.type().split(".")[-1])
     return cls(indices, values, torch.Size([size, size])) 
 
+
 class DGM_d(nn.Module):
     def __init__(self, embed_f, k=5, distance="euclidean", sparse=True):
         super(DGM_d, self).__init__()
@@ -36,7 +37,6 @@ class DGM_d(nn.Module):
         self.sparse=sparse
         
         self.temperature = nn.Parameter(torch.tensor(1. if distance=="hyperbolic" else 4.).float())
-        self.threshold = nn.Parameter(torch.tensor(0.2).float())
         self.embed_f = embed_f
         self.centroid=None
         self.scale=None
@@ -48,18 +48,13 @@ class DGM_d(nn.Module):
     def forward(self, x, A, not_used=None, fixedges=None):
         if x.shape[0]==1:
             x = x[0]
-#         print("XDIM ", x.dim())
         x = self.embed_f(x,A)
-#         print(x)
         if x.dim()==2:
             x = x[None,...]
     
         if self.training:
             if fixedges is not None:                
                 return x, fixedges, torch.zeros(fixedges.shape[0],fixedges.shape[-1]//self.k,self.k,dtype=torch.float,device=x.device)
-#             D, _x = self.distance(x)
-            #remove self loop:
-#             torch.diagonal(D,0,1,2).add_(1e20)
             #sampling here
             edges_hat, logprobs = self.sample_without_replacement(x)
                 
@@ -67,12 +62,8 @@ class DGM_d(nn.Module):
             with torch.no_grad():
                 if fixedges is not None:                
                     return x, fixedges, torch.zeros(fixedges.shape[0],fixedges.shape[-1]//self.k,self.k,dtype=torch.float,device=x.device)
-#                 D, _x = self.distance(x)
-                #remove self loop:
-#                 torch.diagonal(D,0,1,2).add_(1e20)
                 #sampling here
                 edges_hat, logprobs = self.sample_without_replacement(x)
-
               
         if self.debug:
             if self.distance=="euclidean":
@@ -92,12 +83,6 @@ class DGM_d(nn.Module):
         
         b,n,_ = x.shape
         
-
-
-#         q = torch.rand_like(x[:,:,None,:1])+1e-8
-#         q = LazyTensor(-torch.log(-torch.log(q)))
-
-        # print(lq.shape)
         if self.distance=="euclidean":
             G_i = LazyTensor(x[:, :, None, :])    # (M**2, 1, 2)
             X_j = LazyTensor(x[:, None, :, :])    # (1, N, 2)
@@ -150,7 +135,6 @@ class DGM_d(nn.Module):
 
         
         rows = torch.arange(n).view(1,n,1).to(x.device).repeat(b,1,self.k)
-#         edges = torch.stack((rows.view(b,-1),indices.view(b,-1)),-2)
         edges = torch.stack((indices.view(b,-1),rows.view(b,-1)),-2)
 
         if self.sparse:
@@ -161,7 +145,7 @@ class DGM_c(nn.Module):
     input_dim = 4
     debug=False
     
-    def __init__(self, embed_f, distance=pairwise_euclidean_distances):
+    def __init__(self, embed_f, k=None, distance="euclidean"):
         super(DGM_c, self).__init__()
         self.temperature = nn.Parameter(torch.tensor(1).float())
         self.threshold = nn.Parameter(torch.tensor(0.5).float())

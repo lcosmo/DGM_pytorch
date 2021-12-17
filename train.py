@@ -3,6 +3,7 @@ sys.path.append('./keops')
 
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["USE_KEOPS"] = "True";
 
 import pickle
 import numpy as np
@@ -98,6 +99,8 @@ if __name__ == "__main__":
     
     parser.add_argument("--dataset", default='Cora')
     parser.add_argument("--fold", default='0', type=int) #Used for k-fold cross validation in tadpole/ukbb
+    
+    
     parser.add_argument("--conv_layers", default=[[32,32],[32,16],[16,8]], type=lambda x :eval(x))
     parser.add_argument("--dgm_layers", default= [[32,16,4],[],[]], type=lambda x :eval(x))
     parser.add_argument("--fc_layers", default=[8,8,3], type=lambda x :eval(x))
