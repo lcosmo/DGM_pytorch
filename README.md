@@ -2,7 +2,6 @@
 
 Code for the paper "Differentiable Graph Module (DGM) for Graph Convolutional Networks" by Anees Kazi*, Luca Cosmo*, Seyed-Ahmad Ahmadi, Nassir Navab, and Michael Bronstein
 
-ArXiv link: https://arxiv.org/abs/2002.04999
 
 ## Installation
 
