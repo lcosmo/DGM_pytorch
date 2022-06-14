@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./keops')
+sys.path.insert(0,'./keops')
 
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
